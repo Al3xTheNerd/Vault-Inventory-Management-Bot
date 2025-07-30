@@ -3,3 +3,4 @@ __pycache__/
 .env
 .VSCodeCounter
 database.db
+vault_database.db

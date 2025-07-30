@@ -7,7 +7,8 @@ cogs = [
     "Error",
     "RepeatingTasks",
     "ItemSearch",
-    "Misc"
+    "Misc",
+    "Vault"
 ]
 
 bot = discord.Bot(
