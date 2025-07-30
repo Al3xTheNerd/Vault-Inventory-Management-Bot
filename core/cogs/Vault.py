@@ -34,6 +34,13 @@ async def idTabComplete(ctx: discord.ApplicationContext):
         return formatted
     return discord.OptionChoice(name = "No Entries Available", value = "-1")
 
+async def donorTabComplete(ctx: discord.ApplicationContext):
+    vaultList = await vault.getVault()
+    if vaultList:
+        return list(set([x.Donor for x in vaultList]))
+    return None
+
+
 async def vaultToEmbed(currentVault: List[VaultEntry], itemName: str) -> discord.Embed:
     actualItems = [x for x in currentVault if x.ItemName == itemName]
     embed = discord.Embed(title=f"{itemName}",
@@ -139,7 +146,7 @@ class Vault(commands.Cog):
     @vault.command(
         name = "lookupdonor",
         description = "Look at all donations from an individual.")
-    @option("donor", description="Enter the name of the Donor.", required = True)
+    @option("donor", description="Enter the name of the Donor.", required = True, autocomplete = donorTabComplete)
     async def vaultViewDonorCommand(
             self,
             ctx: discord.ApplicationContext,
