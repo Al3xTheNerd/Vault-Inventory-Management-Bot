@@ -32,7 +32,7 @@ async def idTabComplete(ctx: discord.ApplicationContext):
         for id, spag in items.items():
             formatted.append(discord.OptionChoice(name = spag, value = id))
         return formatted
-    return None
+    return discord.OptionChoice(name = "No Entries Available", value = "-1")
 
 async def vaultToEmbed(currentVault: List[VaultEntry], itemName: str) -> discord.Embed:
     actualItems = [x for x in currentVault if x.ItemName == itemName]
@@ -81,11 +81,12 @@ class Vault(commands.Cog):
     @option("server", description = "Which server is the item on?", choices = ["Arcane", "Cosmic", "Elysium"], required = True)
     @option("donor", description="Who donated the item?", required = False, default = "")
     @commands.check(checkUser) # type: ignore
-    async def vaultAddEntryCommand(self,
-                          ctx: discord.ApplicationContext,
-                          item: str,
-                          server: str,
-                          donor: str):
+    async def vaultAddEntryCommand(
+            self,
+            ctx: discord.ApplicationContext,
+            item: str,
+            server: str,
+            donor: str):
         if donor == "": donor = None # type: ignore
         itemsList = await getItemList()
         if not itemsList:
@@ -105,41 +106,44 @@ class Vault(commands.Cog):
             await ctx.respond(f"Entry added with id: {entry.id}")
         else:
             await ctx.respond("Something went wrong :(")
-    
+
+    @vault.command(
+        name = "deleteentry",
+        description = "Remove a donation from the database.")
+    @option("id", description="Enter the entry ID!", required = True, autocomplete = idTabComplete)
+    @commands.check(checkUser) # type: ignore
+    async def vaultDeleteEntryCommand(
+            self,
+            ctx: discord.ApplicationContext,
+            id: int):
+        if await vault.deleteEntry(id):
+            await ctx.respond(f"Entry ID: {id} Deleted.")
+        else:
+            await ctx.respond("Something happened.")
+
     @vault.command(
         name = "viewitem",
         description = "View inventory info on an item.")
     @option("item", description="Pick an item!", autocomplete = itemNameTabComplete, required = True)
-    async def vaultViewItemCommand(self,
-                          ctx: discord.ApplicationContext,
-                          item: str):
+    async def vaultViewItemCommand(
+            self,
+            ctx: discord.ApplicationContext,
+            item: str):
         currentVault = await vault.getVault()
         if currentVault:
             embed = await vaultToEmbed(currentVault, item)
             await ctx.respond(embed = embed)
         else:
             await ctx.respond("No items in vault whatsoever :(")
-            
-    @vault.command(
-        name = "deleteentry",
-        description = "Remove a donation from the database.")
-    @option("id", description="Enter the entry ID!", required = True, autocomplete = idTabComplete)
-    @commands.check(checkUser) # type: ignore
-    async def vaultDeleteEntryCommand(self,
-                          ctx: discord.ApplicationContext,
-                          id: int):
-        if await vault.deleteEntry(id):
-            await ctx.respond(f"Entry ID: {id} Deleted.")
-        else:
-            await ctx.respond("Something happened.")
-    
+
     @vault.command(
         name = "lookupdonor",
         description = "Look at all donations from an individual.")
     @option("donor", description="Enter the name of the Donor.", required = True)
-    async def vaultViewDonorCommand(self,
-                          ctx: discord.ApplicationContext,
-                          donor: str):
+    async def vaultViewDonorCommand(
+            self,
+            ctx: discord.ApplicationContext,
+            donor: str):
         if donor == "None": donor = None # type: ignore
         currentVault = await vault.getVault()
         if currentVault:
@@ -147,7 +151,6 @@ class Vault(commands.Cog):
             await ctx.respond(embed = embed)
         else:
             await ctx.respond("No items in vault whatsoever :(")
-
 
 def setup(bot: discord.Bot):
     bot.add_cog(Vault(bot))
