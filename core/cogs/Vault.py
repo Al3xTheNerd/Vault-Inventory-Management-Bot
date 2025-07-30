@@ -24,6 +24,16 @@ async def itemNameTabComplete(ctx: discord.AutocompleteContext):
         return [item for item in itemsList if ctx.value.lower() in item.lower()]
     return None
 
+async def idTabComplete(ctx: discord.ApplicationContext):
+    vaultList = await vault.getVault()
+    if vaultList:
+        items = {x.id: f"{x.id} - {x.ItemName} - {x.Donor}" for x in vaultList if ctx.value.lower() in x.ItemName.lower()}
+        formatted = []
+        for id, spag in items.items():
+            formatted.append(discord.OptionChoice(name = spag, value = id))
+        return formatted
+    return None
+
 async def vaultToEmbed(currentVault: List[VaultEntry], itemName: str) -> discord.Embed:
     actualItems = [x for x in currentVault if x.ItemName == itemName]
     embed = discord.Embed(title=f"{itemName}",
@@ -113,7 +123,7 @@ class Vault(commands.Cog):
     @vault.command(
         name = "deleteentry",
         description = "Remove a donation from the database.")
-    @option("id", description="Enter the entry ID!", required = True)
+    @option("id", description="Enter the entry ID!", required = True, autocomplete = idTabComplete)
     @commands.check(checkUser) # type: ignore
     async def vaultDeleteEntryCommand(self,
                           ctx: discord.ApplicationContext,
