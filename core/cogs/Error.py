@@ -34,6 +34,8 @@ class ErrorCog(commands.Cog):
         elif isinstance(error, CrateNotInDatabaseError):
             if ctx.selected_options:
                 await ctx.respond(f"Crate: `{ctx.selected_options[0]["value"]}` is not valid. Please use the Auto Complete suggestions!")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.respond("You do not have permission to use this command.")
         else:
             raise error
     
