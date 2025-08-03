@@ -37,7 +37,7 @@ async def idTabComplete(ctx: discord.ApplicationContext):
 async def donorTabComplete(ctx: discord.ApplicationContext):
     vaultList = await vault.getVault()
     if vaultList:
-        return list(set([x.Donor for x in vaultList]))
+        return list(set([x.Donor for x in vaultList if ctx.value.lower() in x.Donor.lower()])) # type: ignore
     return None
 
 
