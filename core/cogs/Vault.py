@@ -35,11 +35,11 @@ async def idTabComplete(ctx: discord.ApplicationContext):
         return formatted
     return discord.OptionChoice(name = "No Entries Available", value = "-1")
 
-async def vaultItemNameTabComplete() -> List[VaultEntry] | None:
+async def vaultItemNameTabComplete(ctx: discord.ApplicationContext) -> List[VaultEntry] | None:
     try:
         entries = await vault.getVault()
         if entries:
-            correctItems: List[str] | None = [x.ItemName for x in entries]
+            correctItems: List[str] | None = [x.ItemName for x in entries if ctx.value.lower() in x.ItemName.lower()]
         return correctItems # type: ignore
     except:
         return None
