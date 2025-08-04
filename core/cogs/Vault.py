@@ -20,6 +20,7 @@ def checkUser(ctx: discord.ApplicationContext):
 
 async def itemNameTabComplete(ctx: discord.AutocompleteContext):
     itemsList = await getItemListTabComplete()
+    
     if itemsList:
         return [item for item in itemsList if ctx.value.lower() in item.lower()]
     return None
@@ -33,6 +34,15 @@ async def idTabComplete(ctx: discord.ApplicationContext):
             formatted.append(discord.OptionChoice(name = spag, value = id))
         return formatted
     return discord.OptionChoice(name = "No Entries Available", value = "-1")
+
+async def vaultItemNameTabComplete() -> List[VaultEntry] | None:
+    try:
+        entries = await vault.getVault()
+        if entries:
+            correctItems: List[str] | None = [x.ItemName for x in entries]
+        return correctItems # type: ignore
+    except:
+        return None
 
 async def donorTabComplete(ctx: discord.ApplicationContext):
     vaultList = await vault.getVault()
@@ -135,7 +145,7 @@ class Vault(commands.Cog):
     @vault.command(
         name = "viewitem",
         description = "View inventory info on an item.")
-    @option("item", description="Pick an item!", autocomplete = itemNameTabComplete, required = True)
+    @option("item", description="Pick an item!", autocomplete = vaultItemNameTabComplete, required = True)
     async def vaultViewItemCommand(
             self,
             ctx: discord.ApplicationContext,

@@ -15,6 +15,17 @@ async def getVault() -> List[VaultEntry] | None:
         return correctEntries
     except:
         return None
+    
+async def vaultItemNameTabComplete() -> List[VaultEntry] | None:
+    try:
+        with AsyncPickleDB(vaultDatabaseFile) as database:
+            correctItems = None
+            items: List[Dict[str, str]] | None = await database.aget("vault")
+            if items:
+                correctItems: List[str] | None = [dictToVaultEntry(x).ItemName for x in items]
+        return correctItems # type: ignore
+    except:
+        return None
 
 async def updateVault(entries: List[VaultEntry]) -> bool:
     try:
