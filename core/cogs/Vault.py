@@ -103,14 +103,15 @@ class Vault(commands.Cog):
             raise NoItemsInDatabaseError
         itemNameList = [x.ItemName for x in itemsList]
         if item not in itemNameList:
-            raise ItemNotInDatabaseError
-        crateList = await getCrateList()
-        if not crateList:
-            raise NoCratesInDatabaseError
-        itemObject = [x for x in itemsList if x.ItemName == item][0]
-        crateName = [x for x in crateList if itemObject.CrateID == x.id][0].CrateName
-        
-        entry = VaultEntry(await vault.getNextID(), itemObject.ItemName, crateName, donor, server)
+            entry = VaultEntry(await vault.getNextID(), item, "Custom", donor, server)
+        else:
+            crateList = await getCrateList()
+            if not crateList:
+                raise NoCratesInDatabaseError
+            itemObject = [x for x in itemsList if x.ItemName == item][0]
+            crateName = [x for x in crateList if itemObject.CrateID == x.id][0].CrateName
+            
+            entry = VaultEntry(await vault.getNextID(), itemObject.ItemName, crateName, donor, server)
         res = await vault.addEntry(entry)
         if res: 
             await ctx.respond(f"Entry added with id: {entry.id}")
