@@ -61,7 +61,7 @@ async def vaultToEmbed(currentVault: List[VaultEntry], itemName: str) -> discord
         serverItems = [x for x in actualItems if x.Server == server]
         if serverItems:
             for entry in serverItems:
-                if len(serverValue) > 900:
+                if len(serverValue) > 950:
                     embed.add_field(name = f"{server} ({len(serverItems)})", value = f"{serverValue}```", inline = False)
                     serverValue = "```n"
                 serverValue += f"{entry.id} - {entry.Donor}\n"
@@ -80,6 +80,9 @@ async def vaultToDonorEmbed(currentVault: List[VaultEntry], donor: str) -> disco
         serverItems = [x for x in actualItems if x.Server == server]
         if serverItems:
             for entry in serverItems:
+                if len(serverValue) > 950:
+                    embed.add_field(name = f"{server} ({len(serverItems)})", value = f"{serverValue}```", inline = False)
+                    serverValue = "```n"
                 serverValue += f"{entry.id} - {entry.ItemName}\n"
         else:
             serverValue += "No donations, yet.\n"
