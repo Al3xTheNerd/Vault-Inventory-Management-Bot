@@ -12,8 +12,8 @@ from core.cogs.ErrorDefinitions import *
 
 
 servers = ["Arcane", "Cosmic", "Elysium"]
-#                         Alex                 aari                  yofun               linoha
-validUsers = [899005507514302524, 889213585690067065, 288157206585671681, 1253252589240324158]
+#                         Alex                 aari                      linoha
+validUsers = [899005507514302524, 889213585690067065, 1253252589240324158]
 
 def checkUser(ctx: discord.ApplicationContext):
     return ctx.author.id in validUsers
