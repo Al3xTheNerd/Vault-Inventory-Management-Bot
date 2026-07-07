@@ -27,3 +27,7 @@ class NoCratesInDatabaseError(commands.CommandError):
 class CrateNotInDatabaseError(commands.CommandError):
     def __init__(self, message = "Crate not found in the Database"):
         super().__init__(message)
+
+class MinimumConstraintError(commands.CommandError):
+    def __init__(self, message = "Must have at least 1 constraint."):
+        super().__init__(message)

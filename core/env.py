@@ -9,3 +9,4 @@ itemSoloAddress = os.environ.get('ITEMSOLOADDRESS')
 itemImageAddress = os.environ.get('ITEMIMAGEADDRESS')
 databaseFile = os.environ.get('DATABASEFILE')
 vaultDatabaseFile = os.environ.get('VAULTDBFILE')
+server_name = "MysticMC"

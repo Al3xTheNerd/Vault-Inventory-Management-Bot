@@ -9,6 +9,7 @@ class Crate:
     CrateName: str
     ReleaseDate: str
     URLTag: str
+    CrateType: str
 
 
 def dictToCrate(crate: Dict[str, str]):
@@ -17,4 +18,5 @@ def dictToCrate(crate: Dict[str, str]):
             crate["CrateName"],
             crate["ReleaseDate"],
             crate["URLTag"],
+            crate["CrateType"]
             )

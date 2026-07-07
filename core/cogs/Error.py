@@ -36,6 +36,10 @@ class ErrorCog(commands.Cog):
                 await ctx.respond(f"Crate: `{ctx.selected_options[0]["value"]}` is not valid. Please use the Auto Complete suggestions!")
         elif isinstance(error, commands.CheckFailure):
             await ctx.respond("You do not have permission to use this command.")
+        elif isinstance(error, MinimumConstraintError):
+            await ctx.respond("Please specify at least 1 constraint for this command.")
+        elif isinstance(error, discord.Forbidden):
+            print("Invalid Pagination Status.")
         else:
             raise error
     
