@@ -63,7 +63,7 @@ async def vaultToEmbed(currentVault: List[VaultEntry], itemName: str) -> discord
             for entry in serverItems:
                 if len(serverValue) > 950:
                     embed.add_field(name = f"{server} ({len(serverItems)})", value = f"{serverValue}```", inline = False)
-                    serverValue = "```n"
+                    serverValue = "```\n"
                 serverValue += f"{entry.id} - {entry.Donor}\n"
         else:
             serverValue += "No donations, yet.\n"
