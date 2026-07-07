@@ -1,3 +1,4 @@
 git+https://github.com/Pycord-Development/pycord
 pickledb==1.3.2
 python-dotenv
+pillow
